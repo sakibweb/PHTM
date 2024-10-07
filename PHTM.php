@@ -60,30 +60,33 @@ class PHTM {
         }
     }
 
-    /**
-     * Calculate the difference between two date/times.
-     * 
-     * @param string $datetime1 First date/time string
-     * @param string $datetime2 Second date/time string
-     * @return array Associative array containing the difference in years, months, days, hours, minutes, and seconds
-     */
-    public static function calculate($datetime1, $datetime2 = null) {
-        if ($datetime2 === null) {
-            $datetime2 = self::getTime();
-        }
+    /**    
+     * Calculate the difference between two date/times.    
+     *     
+     * @param string $datetime1 First date/time string    
+     * @param string $datetime2 Second date/time string    
+     * @return array Associative array containing the difference in years, months, days, hours, minutes, and seconds    
+     */    
+    public static function calculate($datetime1, $datetime2 = null) {    
+        if ($datetime2 === null) {    
+            $datetime2 = self::getTime();    
+        }    
+            
+        $date1 = new DateTime($datetime1);    
+        $date2 = new DateTime($datetime2);    
+        $interval = $date1->diff($date2);    
         
-        $date1 = new DateTime($datetime1);
-        $date2 = new DateTime($datetime2);
-        $interval = $date1->diff($date2);
-        
-        return [
-            'years'   => $interval->y,
-            'months'  => $interval->m,
-            'days'    => $interval->d,
-            'hours'   => $interval->h,
-            'minutes' => $interval->i,
-            'seconds' => $interval->s,
-        ];
+        $isExpired = $date1 < $date2;
+
+        return [    
+            'years'   => $interval->y,    
+            'months'  => $interval->m,    
+            'days'    => $interval->d,    
+            'hours'   => $interval->h,    
+            'minutes' => $interval->i,    
+            'seconds' => $interval->s,    
+            'expire'  => !$isExpired  
+        ];    
     }
 
     /**
